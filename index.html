@@ -28,7 +28,7 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 10; max-width: 85%;
             position: relative;
@@ -39,19 +39,22 @@
             border-radius: 15px; margin-bottom: 15px;
         }
 
-        /* Carrusel de fotos de fondo */
-        .carrusel-fondo {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 2; display: none; justify-content: center; align-items: center;
-            pointer-events: none;
+        /* Contenedores de fotos a los lados (Izquierda y Derecha) */
+        .fotos-laterales {
+            position: absolute; top: 0; width: 22vw; height: 100vh;
+            z-index: 2; display: none; flex-direction: column; 
+            justify-content: space-around; align-items: center; pointer-events: none;
         }
-        .foto-carrusel {
-            position: absolute; width: 80%; max-width: 400px; height: auto;
-            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            opacity: 0; transition: opacity 1.5s ease-in-out;
-            object-fit: cover; border: 5px solid white;
+        #fotos-izquierda { left: 2vw; }
+        #fotos-derecha { right: 2vw; }
+
+        .foto-lateral {
+            width: 100%; max-width: 160px; height: 160px;
+            border-radius: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            opacity: 0; transition: opacity 1.2s ease-in-out;
+            object-fit: cover; border: 4px solid white;
         }
-        .foto-carrusel.activa { opacity: 0.45; } /* Opacidad ideal para ver el texto encima */
+        .foto-lateral.activa { opacity: 1; }
 
         h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; transition: 0.3s; }
         
@@ -81,11 +84,10 @@
             100% { transform: translateY(-10vh); opacity: 0; }
         }
 
-        /* Partículas de fuegos artificiales (Imágenes o Emojis) */
+        /* Partículas de fuegos artificiales */
         .particula-firework {
             position: absolute; pointer-events: none; z-index: 99;
             animation: explosionCorazon 2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-            border-radius: 50%;
         }
         .particula-firework.es-imagen {
             object-fit: cover; border: 2px solid white; border-radius: 10px;
@@ -96,6 +98,11 @@
             0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
             50% { opacity: 1; }
             100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.6); opacity: 0; }
+        }
+
+        /* Ajustes para celulares: oculta los lados para que no se amontone en pantallas chicas */
+        @media (max-width: 768px) {
+            .fotos-laterales { display: none !important; }
         }
     </style>
 </head>
@@ -111,15 +118,20 @@
     <audio id="m1" loop><source src="corridos_oni.mp3" type="audio/mp3"></audio>
     <audio id="m2" loop><source src="new_eyes.mp3" type="audio/mp3"></audio>
 
-    <div id="carrusel" class="carrusel-fondo">
-        <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
-        <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
-        <img src="tercera.jpg" class="foto-carrusel" alt="Foto 3">
-        <img src="cuarta.jpg" class="foto-carrusel" alt="Foto 4">
-        <img src="quinta.jpg" class="foto-carrusel" alt="Foto 5">
-        <img src="sexta.jpg" class="foto-carrusel" alt="Foto 6">
-        <img src="septima.jpeg" class="foto-carrusel" alt="Foto 7">
-        <img src="octava.jpeg" class="foto-carrusel" alt="Foto 8">
+    <!-- Fotos del lado izquierdo -->
+    <div id="fotos-izquierda" class="fotos-laterales">
+        <img src="primera.jpg" class="foto-lateral" alt="F1">
+        <img src="segunda.jpg" class="foto-lateral" alt="F2">
+        <img src="tercera.jpg" class="foto-lateral" alt="F3">
+        <img src="cuarta.jpg" class="foto-lateral" alt="F4">
+    </div>
+
+    <!-- Fotos del lado derecho -->
+    <div id="fotos-derecha" class="fotos-laterales">
+        <img src="quinta.jpg" class="foto-lateral" alt="F5">
+        <img src="sexta.jpg" class="foto-lateral" alt="F6">
+        <img src="septima.jpeg" class="foto-lateral" alt="F7">
+        <img src="octava.jpeg" class="foto-lateral" alt="F8">
     </div>
 
     <div id="contenido" class="oculto">
@@ -153,9 +165,9 @@
         const noBtn = document.getElementById('noBtn');
         const texto = document.getElementById('textoPregunta');
         const celebracionDiv = document.getElementById('celebracion');
-        const carruselDiv = document.getElementById('carrusel');
+        const izqDiv = document.getElementById('fotos-izquierda');
+        const derDiv = document.getElementById('fotos-derecha');
 
-        // Arreglo con tus imágenes añadidas
         const tusImagenes = [
             "primera.jpg", "segunda.jpg", "tercera.jpg", "cuarta.jpg",
             "quinta.jpg", "sexta.jpg", "septima.jpeg", "octava.jpeg"
@@ -219,8 +231,13 @@
             document.body.style.backgroundColor = "#ffb3c1";
             
             modoCelebracion = true;
-            carruselDiv.style.display = "flex"; // Muestra las fotos de fondo
-            iniciarCarrusel();
+            
+            // Solo activamos las columnas si la pantalla es lo bastante ancha (PC/Tablet)
+            if (window.innerWidth > 768) {
+                izqDiv.style.display = "flex";
+                derDiv.style.display = "flex";
+                iniciarCicloFotos();
+            }
             
             setInterval(crearCorazonFondo, 150);
         });
@@ -235,32 +252,33 @@
             setTimeout(() => c.remove(), 4000);
         }
 
-        // Lógica para desvanecer y ciclar las fotos en el fondo
-        function iniciarCarrusel() {
-            const fotos = document.querySelectorAll('.foto-carrusel');
-            let indice = 0;
+        // Lógica para que las imágenes laterales vayan apareciendo y desapareciendo de forma intercalada
+        function iniciarCicloFotos() {
+            const todasLasFotos = document.querySelectorAll('.foto-lateral');
             
-            fotos[indice].classList.add('activa');
-            
+            // Aparecen todas las fotos al inicio
+            todasLasFotos.forEach(f => f.classList.add('activa'));
+
+            // Cada 3 segundos va alternando el desvanecimiento de algunas de forma aleatoria para darle dinamismo
             setInterval(() => {
-                fotos[indice].classList.remove('activa');
-                indice = (indice + 1) % fotos.length;
-                fotos[indice].classList.add('activa');
-            }, 3500); // Cambia cada 3.5 segundos
+                todasLasFotos.forEach(f => {
+                    if (Math.random() > 0.5) {
+                        f.classList.toggle('activa');
+                    }
+                });
+            }, 3000);
         }
 
         // Clic para detonar la silueta de corazón matemática
         document.addEventListener('click', (e) => {
             if (!modoCelebracion) return;
             
-            const numeroParticulas = 24; // Cantidad de puntos del corazón
+            const numeroParticulas = 24; 
             for (let i = 0; i < numeroParticulas; i++) {
-                // Ecuación paramétrica matemática del corazón
                 const t = (i / numeroParticulas) * Math.PI * 2;
                 const xEcuacion = 16 * Math.pow(Math.sin(t), 3);
                 const yEcuacion = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
-                // Factor de escala de la explosión
                 const escala = 10; 
                 const tx = (xEcuacion * escala) + 'px';
                 const ty = (yEcuacion * escala) + 'px';
@@ -270,7 +288,7 @@
         });
 
         function crearElementoCorazon(x, y, tx, ty) {
-            const esImagen = Math.random() > 0.35; // 65% probabilidad de ser una foto tuya, 35% emoji
+            const esImagen = Math.random() > 0.35; 
             let el;
 
             if (esImagen) {
