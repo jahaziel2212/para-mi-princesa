@@ -31,11 +31,11 @@
             background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 10; max-width: 85%;
-            position: relative;
+            position: relative; /* Contenedor padre de referencia */
         }
 
         .gif-container {
-            position: relative;
+            position: relative; /* Permite que las fotos se alineen perfectamente sobre el gatito */
             width: 250px; height: 250px; margin: 0 auto 15px auto;
         }
 
@@ -44,7 +44,7 @@
             border-radius: 15px;
         }
 
-        /* Carrusel de fotos exclusivo de la pantalla de celebración */
+        /* Carrusel de fotos DENTRO de la misma capa del gatito */
         .carrusel-capa {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 30; display: none; justify-content: center; align-items: center;
@@ -56,6 +56,7 @@
             opacity: 0; transition: opacity 1.2s ease-in-out;
             object-fit: cover; border: 4px solid white; box-sizing: border-box;
         }
+        /* Rotaciones ligeras para dar efecto de foto instantánea */
         .foto-carrusel:nth-child(odd) { transform: rotate(-2deg); }
         .foto-carrusel:nth-child(even) { transform: rotate(2deg); }
         .foto-carrusel.activa { opacity: 1; } 
@@ -127,8 +128,6 @@
 
     <div id="contenido" class="oculto">
         <div class="container">
-            
-            <!-- BLOQUE 1: PREGUNTA (Completamente limpio) -->
             <div id="pregunta">
                 <div class="gif-container">
                     <img id="imgDinamica" class="gato-principal" src="gato_flor.jpg" alt="Imagen">
@@ -140,12 +139,12 @@
                 </div>
             </div>
 
-            <!-- BLOQUE 2: CELEBRACIÓN (Con su propia estructura independiente) -->
             <div id="celebracion" class="oculto">
                 <div class="gif-container">
+                    <!-- El gatito inicial -->
                     <img class="gato-principal" src="gato_flor.jpg" alt="Celebración">
                     
-                    <!-- El carrusel vive aquí sin estorbar a la pantalla anterior -->
+                    <!-- NUEVO: El carrusel ahora vive exactamente encima del gatito -->
                     <div id="carrusel" class="carrusel-capa">
                         <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
                         <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
@@ -160,7 +159,6 @@
                 <h1>¡SABÍA QUE DIRÍAS QUE SÍ! 🐹❤️</h1>
                 <p style="color:#d81b60; font-size: 0.9rem;">(Haz click en la pantalla para ver nuestra magia uwu 🎉)</p>
             </div>
-
         </div>
     </div>
 
@@ -203,7 +201,6 @@
             noBtn.style.top = y + "px";
         }
 
-        // Ahora el cambio de imágenes aquí es instantáneo y fluido ⚡
         noBtn.addEventListener('click', () => {
             clickCount++;
             if (clickCount === 1) {
@@ -239,7 +236,7 @@
             
             modoCelebracion = true;
             
-            // Los 3 segundos de gracia para el gatito antes de activar el carrusel encima
+            // Le damos 3 segundos al gatito solo y luego se activa el carrusel encima
             setTimeout(() => {
                 if(modoCelebracion) {
                     carruselDiv.style.display = "flex";
@@ -273,6 +270,7 @@
             }, 3200); 
         }
 
+        // Clic para detonar la silueta matemática de corazón
         document.addEventListener('click', (e) => {
             if (!modoCelebracion) return;
             
