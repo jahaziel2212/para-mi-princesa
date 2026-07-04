@@ -34,43 +34,43 @@
             position: relative;
         }
 
-        .gif-container img {
-            width: 250px; height: 250px; object-fit: cover;
-            border-radius: 15px; margin-bottom: 15px;
+        .gif-container {
+            position: relative;
+            width: 250px; height: 250px; margin: 0 auto 15px auto;
         }
 
-        /* Carrusel de fotos DELANTE del gatito */
+        .gif-container img.gato-principal {
+            width: 100%; height: 100%; object-fit: cover;
+            border-radius: 15px;
+        }
+
+        /* Carrusel de fotos DENTRO de la misma capa del gatito */
         .carrusel-capa {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 20; display: none; justify-content: center; align-items: center;
+            z-index: 30; display: none; justify-content: center; align-items: center;
             pointer-events: none;
         }
         .foto-carrusel {
-            position: absolute; width: 75%; max-width: 320px; height: auto;
-            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: absolute; width: 100%; height: 100%;
+            border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             opacity: 0; transition: opacity 1.2s ease-in-out;
-            object-fit: cover; border: 6px solid white;
+            object-fit: cover; border: 4px solid white; box-sizing: border-box;
         }
-        /* Las alternamos un poquito a los lados para que luzcan mejor */
-        .foto-carrusel:nth-child(odd) { transform: rotate(-3deg) translateX(-10px); }
-        .foto-carrusel:nth-child(even) { transform: rotate(3deg) translateX(10px); }
-        .foto-carrusel.activa { opacity: 0.95; } 
+        .foto-carrusel:nth-child(odd) { transform: rotate(-2deg); }
+        .foto-carrusel:nth-child(even) { transform: rotate(2deg); }
+        .foto-carrusel.activa { opacity: 1; } 
 
-        h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; transition: 0.3s; }
+        h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; transition: 0.3s; position: relative; z-index: 40; }
         
-        .botones { display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; }
+        .botones { display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; z-index: 40; }
         
         button {
             padding: 12px 25px; font-size: 1.1rem; border: none;
             border-radius: 50px; cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
         }
 
-        #siBtn { background-color: #4caf50; color: white; z-index: 30; }
-        
-        #noBtn { 
-            background-color: #f44336; color: white; 
-            position: relative; z-index: 25; transition: 0.1s; 
-        }
+        #siBtn { background-color: #4caf50; color: white; }
+        #noBtn { background-color: #f44336; color: white; transition: 0.1s; }
         
         .oculto { display: none !important; }
         .fade { opacity: 0; }
@@ -113,7 +113,7 @@
     <audio id="m1" loop><source src="corridos_oni.mp3" type="audio/mp3"></audio>
     <audio id="m2" loop><source src="new_eyes.mp3" type="audio/mp3"></audio>
 
-    <!-- Pre-carga oculta de imágenes para solucionar el error en celulares -->
+    <!-- Pre-carga oculta de imágenes -->
     <div style="display:none;">
         <img src="primera.jpg" id="pre-1">
         <img src="segunda.jpg" id="pre-2">
@@ -125,24 +125,13 @@
         <img src="octava.jpeg" id="pre-8">
     </div>
 
-    <!-- Carrusel que se posicionará al frente -->
-    <div id="carrusel" class="carrusel-capa">
-        <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
-        <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
-        <img src="tercera.jpg" class="foto-carrusel" alt="Foto 3">
-        <img src="cuarta.jpg" class="foto-carrusel" alt="Foto 4">
-        <img src="quinta.jpg" class="foto-carrusel" alt="Foto 5">
-        <img src="sexta.jpg" class="foto-carrusel" alt="Foto 6">
-        <img src="septima.jpeg" class="foto-carrusel" alt="Foto 7">
-        <img src="octava.jpeg" class="foto-carrusel" alt="Foto 8">
-    </div>
-
     <div id="contenido" class="oculto">
         <div class="container">
             <div id="pregunta">
                 <div class="gif-container">
-                    <img id="imgDinamica" src="gato_flor.jpg" alt="Imagen">
+                    <img id="imgDinamica" class="gato-principal" src="gato_flor.jpg" alt="Imagen">
                 </div>
+                <!-- TEXTO ACTUALIZADO AQUÍ -->
                 <h1 id="textoPregunta">¿Te gustaría intentarlo conmigo?</h1>
                 <div class="botones" id="contenedorBotones">
                     <button id="siBtn">¡SÍ!</button>
@@ -152,7 +141,18 @@
 
             <div id="celebracion" class="oculto">
                 <div class="gif-container">
-                    <img src="gato_flor.jpg" alt="Celebración">
+                    <img class="gato-principal" src="gato_flor.jpg" alt="Celebración">
+                    
+                    <div id="carrusel" class="carrusel-capa">
+                        <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
+                        <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
+                        <img src="tercera.jpg" class="foto-carrusel" alt="Foto 3">
+                        <img src="cuarta.jpg" class="foto-carrusel" alt="Foto 4">
+                        <img src="quinta.jpg" class="foto-carrusel" alt="Foto 5">
+                        <img src="sexta.jpg" class="foto-carrusel" alt="Foto 6">
+                        <img src="septima.jpeg" class="foto-carrusel" alt="Foto 7">
+                        <img src="octava.jpeg" class="foto-carrusel" alt="Foto 8">
+                    </div>
                 </div>
                 <h1>¡SABÍA QUE DIRÍAS QUE SÍ! 🐹❤️</h1>
                 <p style="color:#d81b60; font-size: 0.9rem;">(Haz click en la pantalla para ver nuestra magia uwu 🎉)</p>
@@ -234,7 +234,6 @@
             
             modoCelebracion = true;
             
-            // Le damos 3 segundos exactos al gatito solo antes de activar las fotos al frente
             setTimeout(() => {
                 if(modoCelebracion) {
                     carruselDiv.style.display = "flex";
@@ -268,18 +267,15 @@
             }, 3200); 
         }
 
-        // Clic para detonar la silueta matemática de corazón
         document.addEventListener('click', (e) => {
             if (!modoCelebracion) return;
             
-            // Evitamos que explote si pulsa accidentalmente antes de que aparezcan
             const numeroParticulas = 28; 
             for (let i = 0; i < numeroParticulas; i++) {
                 const t = (i / numeroParticulas) * Math.PI * 2;
                 const xEcuacion = 16 * Math.pow(Math.sin(t), 3);
                 const yEcuacion = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
-                // Reducido levemente para pantallas móviles
                 const escala = window.innerWidth < 600 ? 7 : 11; 
                 const tx = (xEcuacion * escala) + 'px';
                 const ty = (yEcuacion * escala) + 'px';
@@ -295,7 +291,6 @@
             if (esImagen) {
                 el = document.createElement('img');
                 el.className = 'particula-firework es-imagen';
-                // Elige la ruta de imagen directa
                 el.src = tusImagenes[Math.floor(Math.random() * tusImagenes.length)];
             } else {
                 el = document.createElement('div');
@@ -311,8 +306,6 @@
             el.style.setProperty('--ty', ty);
 
             document.body.appendChild(el);
-            
-            // Remueve después de terminar la animación
             setTimeout(() => el.remove(), 1800);
         }
     </script>
