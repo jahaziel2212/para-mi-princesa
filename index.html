@@ -44,7 +44,7 @@
             border-radius: 15px;
         }
 
-        /* Carrusel de fotos DENTRO de la misma capa del gatito */
+        /* Carrusel de fotos exclusivo de la pantalla de celebración */
         .carrusel-capa {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 30; display: none; justify-content: center; align-items: center;
@@ -127,11 +127,12 @@
 
     <div id="contenido" class="oculto">
         <div class="container">
+            
+            <!-- BLOQUE 1: PREGUNTA (Completamente limpio) -->
             <div id="pregunta">
                 <div class="gif-container">
                     <img id="imgDinamica" class="gato-principal" src="gato_flor.jpg" alt="Imagen">
                 </div>
-                <!-- TEXTO ACTUALIZADO AQUÍ -->
                 <h1 id="textoPregunta">¿Te gustaría intentarlo conmigo?</h1>
                 <div class="botones" id="contenedorBotones">
                     <button id="siBtn">¡SÍ!</button>
@@ -139,10 +140,12 @@
                 </div>
             </div>
 
+            <!-- BLOQUE 2: CELEBRACIÓN (Con su propia estructura independiente) -->
             <div id="celebracion" class="oculto">
                 <div class="gif-container">
                     <img class="gato-principal" src="gato_flor.jpg" alt="Celebración">
                     
+                    <!-- El carrusel vive aquí sin estorbar a la pantalla anterior -->
                     <div id="carrusel" class="carrusel-capa">
                         <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
                         <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
@@ -157,6 +160,7 @@
                 <h1>¡SABÍA QUE DIRÍAS QUE SÍ! 🐹❤️</h1>
                 <p style="color:#d81b60; font-size: 0.9rem;">(Haz click en la pantalla para ver nuestra magia uwu 🎉)</p>
             </div>
+
         </div>
     </div>
 
@@ -199,6 +203,7 @@
             noBtn.style.top = y + "px";
         }
 
+        // Ahora el cambio de imágenes aquí es instantáneo y fluido ⚡
         noBtn.addEventListener('click', () => {
             clickCount++;
             if (clickCount === 1) {
@@ -234,6 +239,7 @@
             
             modoCelebracion = true;
             
+            // Los 3 segundos de gracia para el gatito antes de activar el carrusel encima
             setTimeout(() => {
                 if(modoCelebracion) {
                     carruselDiv.style.display = "flex";
