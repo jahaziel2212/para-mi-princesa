@@ -39,22 +39,22 @@
             border-radius: 15px; margin-bottom: 15px;
         }
 
-        /* Contenedores de fotos a los lados (Izquierda y Derecha) */
-        .fotos-laterales {
-            position: absolute; top: 0; width: 22vw; height: 100vh;
-            z-index: 2; display: none; flex-direction: column; 
-            justify-content: space-around; align-items: center; pointer-events: none;
+        /* Carrusel de fotos DELANTE del gatito */
+        .carrusel-capa {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 20; display: none; justify-content: center; align-items: center;
+            pointer-events: none;
         }
-        #fotos-izquierda { left: 2vw; }
-        #fotos-derecha { right: 2vw; }
-
-        .foto-lateral {
-            width: 100%; max-width: 160px; height: 160px;
-            border-radius: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        .foto-carrusel {
+            position: absolute; width: 75%; max-width: 320px; height: auto;
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             opacity: 0; transition: opacity 1.2s ease-in-out;
-            object-fit: cover; border: 4px solid white;
+            object-fit: cover; border: 6px solid white;
         }
-        .foto-lateral.activa { opacity: 1; }
+        /* Las alternamos un poquito a los lados para que luzcan mejor */
+        .foto-carrusel:nth-child(odd) { transform: rotate(-3deg) translateX(-10px); }
+        .foto-carrusel:nth-child(even) { transform: rotate(3deg) translateX(10px); }
+        .foto-carrusel.activa { opacity: 0.95; } 
 
         h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 20px; min-height: 80px; transition: 0.3s; }
         
@@ -65,11 +65,11 @@
             border-radius: 50px; cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
         }
 
-        #siBtn { background-color: #4caf50; color: white; z-index: 20; }
+        #siBtn { background-color: #4caf50; color: white; z-index: 30; }
         
         #noBtn { 
             background-color: #f44336; color: white; 
-            position: relative; z-index: 15; transition: 0.1s; 
+            position: relative; z-index: 25; transition: 0.1s; 
         }
         
         .oculto { display: none !important; }
@@ -86,23 +86,18 @@
 
         /* Partículas de fuegos artificiales */
         .particula-firework {
-            position: absolute; pointer-events: none; z-index: 99;
-            animation: explosionCorazon 2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            position: absolute; pointer-events: none; z-index: 999;
+            animation: explosionCorazon 1.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
         .particula-firework.es-imagen {
             object-fit: cover; border: 2px solid white; border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 60px; height: 60px;
         }
 
         @keyframes explosionCorazon {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            50% { opacity: 1; }
-            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.6); opacity: 0; }
-        }
-
-        /* Ajustes para celulares: oculta los lados para que no se amontone en pantallas chicas */
-        @media (max-width: 768px) {
-            .fotos-laterales { display: none !important; }
+            70% { opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.55); opacity: 0; }
         }
     </style>
 </head>
@@ -118,20 +113,28 @@
     <audio id="m1" loop><source src="corridos_oni.mp3" type="audio/mp3"></audio>
     <audio id="m2" loop><source src="new_eyes.mp3" type="audio/mp3"></audio>
 
-    <!-- Fotos del lado izquierdo -->
-    <div id="fotos-izquierda" class="fotos-laterales">
-        <img src="primera.jpg" class="foto-lateral" alt="F1">
-        <img src="segunda.jpg" class="foto-lateral" alt="F2">
-        <img src="tercera.jpg" class="foto-lateral" alt="F3">
-        <img src="cuarta.jpg" class="foto-lateral" alt="F4">
+    <!-- Pre-carga oculta de imágenes para solucionar el error en celulares -->
+    <div style="display:none;">
+        <img src="primera.jpg" id="pre-1">
+        <img src="segunda.jpg" id="pre-2">
+        <img src="tercera.jpg" id="pre-3">
+        <img src="cuarta.jpg" id="pre-4">
+        <img src="quinta.jpg" id="pre-5">
+        <img src="sexta.jpg" id="pre-6">
+        <img src="septima.jpeg" id="pre-7">
+        <img src="octava.jpeg" id="pre-8">
     </div>
 
-    <!-- Fotos del lado derecho -->
-    <div id="fotos-derecha" class="fotos-laterales">
-        <img src="quinta.jpg" class="foto-lateral" alt="F5">
-        <img src="sexta.jpg" class="foto-lateral" alt="F6">
-        <img src="septima.jpeg" class="foto-lateral" alt="F7">
-        <img src="octava.jpeg" class="foto-lateral" alt="F8">
+    <!-- Carrusel que se posicionará al frente -->
+    <div id="carrusel" class="carrusel-capa">
+        <img src="primera.jpg" class="foto-carrusel" alt="Foto 1">
+        <img src="segunda.jpg" class="foto-carrusel" alt="Foto 2">
+        <img src="tercera.jpg" class="foto-carrusel" alt="Foto 3">
+        <img src="cuarta.jpg" class="foto-carrusel" alt="Foto 4">
+        <img src="quinta.jpg" class="foto-carrusel" alt="Foto 5">
+        <img src="sexta.jpg" class="foto-carrusel" alt="Foto 6">
+        <img src="septima.jpeg" class="foto-carrusel" alt="Foto 7">
+        <img src="octava.jpeg" class="foto-carrusel" alt="Foto 8">
     </div>
 
     <div id="contenido" class="oculto">
@@ -165,8 +168,7 @@
         const noBtn = document.getElementById('noBtn');
         const texto = document.getElementById('textoPregunta');
         const celebracionDiv = document.getElementById('celebracion');
-        const izqDiv = document.getElementById('fotos-izquierda');
-        const derDiv = document.getElementById('fotos-derecha');
+        const carruselDiv = document.getElementById('carrusel');
 
         const tusImagenes = [
             "primera.jpg", "segunda.jpg", "tercera.jpg", "cuarta.jpg",
@@ -232,12 +234,13 @@
             
             modoCelebracion = true;
             
-            // Solo activamos las columnas si la pantalla es lo bastante ancha (PC/Tablet)
-            if (window.innerWidth > 768) {
-                izqDiv.style.display = "flex";
-                derDiv.style.display = "flex";
-                iniciarCicloFotos();
-            }
+            // Le damos 3 segundos exactos al gatito solo antes de activar las fotos al frente
+            setTimeout(() => {
+                if(modoCelebracion) {
+                    carruselDiv.style.display = "flex";
+                    iniciarCarrusel();
+                }
+            }, 3000);
             
             setInterval(crearCorazonFondo, 150);
         });
@@ -252,34 +255,32 @@
             setTimeout(() => c.remove(), 4000);
         }
 
-        // Lógica para que las imágenes laterales vayan apareciendo y desapareciendo de forma intercalada
-        function iniciarCicloFotos() {
-            const todasLasFotos = document.querySelectorAll('.foto-lateral');
+        function iniciarCarrusel() {
+            const fotos = document.querySelectorAll('.foto-carrusel');
+            let indice = 0;
             
-            // Aparecen todas las fotos al inicio
-            todasLasFotos.forEach(f => f.classList.add('activa'));
-
-            // Cada 3 segundos va alternando el desvanecimiento de algunas de forma aleatoria para darle dinamismo
+            fotos[indice].classList.add('activa');
+            
             setInterval(() => {
-                todasLasFotos.forEach(f => {
-                    if (Math.random() > 0.5) {
-                        f.classList.toggle('activa');
-                    }
-                });
-            }, 3000);
+                fotos[indice].classList.remove('activa');
+                indice = (indice + 1) % fotos.length;
+                fotos[indice].classList.add('activa');
+            }, 3200); 
         }
 
-        // Clic para detonar la silueta de corazón matemática
+        // Clic para detonar la silueta matemática de corazón
         document.addEventListener('click', (e) => {
             if (!modoCelebracion) return;
             
-            const numeroParticulas = 24; 
+            // Evitamos que explote si pulsa accidentalmente antes de que aparezcan
+            const numeroParticulas = 28; 
             for (let i = 0; i < numeroParticulas; i++) {
                 const t = (i / numeroParticulas) * Math.PI * 2;
                 const xEcuacion = 16 * Math.pow(Math.sin(t), 3);
                 const yEcuacion = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
                 
-                const escala = 10; 
+                // Reducido levemente para pantallas móviles
+                const escala = window.innerWidth < 600 ? 7 : 11; 
                 const tx = (xEcuacion * escala) + 'px';
                 const ty = (yEcuacion * escala) + 'px';
                 
@@ -294,15 +295,14 @@
             if (esImagen) {
                 el = document.createElement('img');
                 el.className = 'particula-firework es-imagen';
+                // Elige la ruta de imagen directa
                 el.src = tusImagenes[Math.floor(Math.random() * tusImagenes.length)];
-                el.style.width = '55px';
-                el.style.height = '55px';
             } else {
                 el = document.createElement('div');
                 el.className = 'particula-firework';
                 const emojis = ['❤️', '💖', '🐹', '✨', '💕'];
                 el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-                el.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                el.style.fontSize = (Math.random() * 12 + 22) + 'px';
             }
 
             el.style.left = x + 'px';
@@ -311,7 +311,9 @@
             el.style.setProperty('--ty', ty);
 
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 2000);
+            
+            // Remueve después de terminar la animación
+            setTimeout(() => el.remove(), 1800);
         }
     </script>
 </body>
